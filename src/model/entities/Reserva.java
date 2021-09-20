@@ -1,15 +1,17 @@
 package model.entities;
 
-import java.beans.SimpleBeanInfo;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
-public class Reserva {
+import model.Exception.DomainException;
+
+public class Reserva  {
 
 	Calendar calendario = Calendar.getInstance();
 	Calendar calendario1 = Calendar.getInstance();
-	
+
 	private Integer numberQuarto;
 	private Date checkIn;
 	private Date checkOut;
@@ -20,6 +22,9 @@ public class Reserva {
 	}
 
 	public Reserva(Integer numberQuarto, Date checkIn, Date checkOut) {
+		if (!checkOut.after(checkIn)) {
+			throw new DomainException("Erro in reservation: check-out date must be after check-in date");
+		}
 		this.numberQuarto = numberQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -41,24 +46,22 @@ public class Reserva {
 		return checkOut;
 	}
 
-	public int duracaoDias() {
-		this.calendario.setTime(checkIn);
-		this.calendario1.setTime(checkOut);
-		int duracao = (calendario1.get(calendario1.DAY_OF_MONTH)) - (calendario.get(calendario.DAY_OF_MONTH));
-		return duracao;
+	public long duracaoDias() {
+		long diff = checkOut.getTime() - checkIn.getTime();
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);	
 
 	}
 
-	public String updateDates(Date checkIn, Date checkOut) {
+	public void updateDates(Date checkIn, Date checkOut) {
 		Date date = new Date();
 		if (checkIn.before(date) || checkOut.before(date)) {
-			return "Erro: As datas tem que ser futuras.";
-		} else if (!checkOut.after(checkIn)) {
-			return "Erro in reservation: check-out date must be after check-in date";
+			throw new DomainException("Erro: As datas tem que ser futuras.");
+		}if (!checkOut.after(checkIn)) {
+			throw new DomainException("Erro in reservation: check-out date must be after check-in date");
 		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
+
 	}
 
 	@Override
