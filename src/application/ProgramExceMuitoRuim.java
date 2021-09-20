@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import model.entities.Reserva;
 
-public class Program {
+public class ProgramExceMuitoRuim {
 
 	public static void main(String[] args) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -31,22 +31,24 @@ public class Program {
 			System.out.println(reserva.toString());
 			System.out.println();
 			System.out.println("Entre com as novas datas ");
-
+			
 			System.out.println("Digite o numero do quarto");
 			number = sc.nextInt();
 			System.out.println("Digite a data do check-In  (dd/MM/yyyy)");
 			checkIn = sdf.parse(sc.next());
 			System.out.println("Digite a data do check-Out  (dd/MM/yyyy)");
 			checkOut = sdf.parse(sc.next());
-
-			String error = reserva.updateDates(checkIn, checkOut);
-			if (error != null) {
-				System.out.println("Error in reservation: " + error);
-
+			
+			
+			Date date = new Date();
+			if (checkIn.before(date) || checkOut.before(date)) {
+				System.out.println("Erro: As datas tem que ser futuras.");
+			} else if (!checkOut.after(checkIn)) {
+				System.out.println("Erro in reservation: check-out date must be after check-in date");
 			} else {
+				reserva.updateDates(checkIn, checkOut);
 				System.out.println("Reserva: ");
 				System.out.println(reserva.toString());
-
 			}
 
 		}

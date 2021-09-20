@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Reserva {
+public class ReservaExceMuitoRuim {
 
 	Calendar calendario = Calendar.getInstance();
 	Calendar calendario1 = Calendar.getInstance();
@@ -15,11 +15,11 @@ public class Reserva {
 	private Date checkOut;
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	public Reserva() {
+	public ReservaExceMuitoRuim() {
 
 	}
 
-	public Reserva(Integer numberQuarto, Date checkIn, Date checkOut) {
+	public ReservaExceMuitoRuim(Integer numberQuarto, Date checkIn, Date checkOut) {
 		this.numberQuarto = numberQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -49,16 +49,9 @@ public class Reserva {
 
 	}
 
-	public String updateDates(Date checkIn, Date checkOut) {
-		Date date = new Date();
-		if (checkIn.before(date) || checkOut.before(date)) {
-			return "Erro: As datas tem que ser futuras.";
-		} else if (!checkOut.after(checkIn)) {
-			return "Erro in reservation: check-out date must be after check-in date";
-		}
+	public void updateDates(Date checkIn, Date checkOut) {
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 
 	@Override
